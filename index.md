@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+<link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+<title>CodePen - Random Gif Generator w/ Giphy API</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<style>
+  body {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+#gif-wrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: #000;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: -1;
+}
+
+#gif-logo {
+  position: fixed;
+  top: .5rem;
+  right: .5rem;
+  border-radius: 30px;
+  padding: 0 1rem;
+  background: #000;
+}
+#gif-logo img {
+  max-width: 150px;
+}
+
+#new-gif {
+  padding: .75rem 2.5rem;
+  font-weight: 600;
+  background: #424242;
+  z-index: 10;
+  color: #fff;
+  border-radius: 30px;
+  border: 0;
+  font-size: 14px;
+  position: fixed;
+  top: .5rem;
+  left: .5rem;
+  transition: background .15s ease;
+  cursor: pointer;
+}
+#new-gif:hover {
+  background: #626262;
+}
+</style>
+<script>
+  window.console = window.console || function(t) {};
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+<body translate="no">
+<div id="gif-wrap"></div>
+<div id="gif-logo"><img src="https://storage.googleapis.com/chydlx/codepen/random-gif-generator/giphy-logo.gif" /></div>
+<button id="new-gif">New Gif</button>
+<script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script id="rendered-js">
+      $(document).ready(function () {
+  // Initiate gifLoop for set interval
+  var refresh;
+  // Duration count in seconds
+  const duration = 1000 * 10;
+  // Giphy API defaults
+  const giphy = {
+    baseURL: "https://api.giphy.com/v1/gifs/",
+    apiKey: "0UTRbFtkMxAplrohufYco5IY74U8hOes",
+    tag: "fail",
+    type: "random",
+    rating: "pg-13" };
+
+  // Target gif-wrap container
+  const $gif_wrap = $("#gif-wrap");
+  // Giphy API URL
+  let giphyURL = encodeURI(
+  giphy.baseURL +
+  giphy.type +
+  "?api_key=" +
+  giphy.apiKey +
+  "&tag=" +
+  giphy.tag +
+  "&rating=" +
+  giphy.rating);
+
+
+  // Call Giphy API and render data
+  var newGif = () => $.getJSON(giphyURL, json => renderGif(json.data));
+
+  // Display Gif in gif wrap container
+  var renderGif = _giphy => {
+    console.log(_giphy);
+    // Set gif as bg image
+    $gif_wrap.css({
+      "background-image": 'url("' + _giphy.image_original_url + '")' });
+
+
+    // Start duration countdown
+    // refreshRate();
+  };
+
+  // Call for new gif after duration
+  // var refreshRate = () => {
+  // 	// Reset set intervals
+  // 	clearInterval(refresh);
+  // 	refresh = setInterval(function() {
+  // 		// Call Giphy API for new gif
+  // 		newGif();
+  // 	}, duration);
+  // };
+
+  // Call Giphy API for new gif
+  newGif();
+
+
+  const newGifButton = $('#new-gif');
+
+  newGifButton.click(newGif);
+});
+      //# sourceURL=pen.js
+    </script>
+</body>
+</html>
